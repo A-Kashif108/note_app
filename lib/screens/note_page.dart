@@ -21,7 +21,7 @@ class NoteViewPage extends StatelessWidget {
     final _noteService = NoteService();
     return Scaffold(
       body: SafeArea(
-          child: Container(
+          child: Padding(
         padding: const EdgeInsets.only(left: 15, right: 15),
         child: Column(
           children: [
@@ -47,85 +47,92 @@ class NoteViewPage extends StatelessWidget {
                           size: 20,
                         )),
                   ),
-                  Container(
+                  Row(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
                     alignment: Alignment.center,
                     height: 35,
                     width: 35,
                     decoration: BoxDecoration(
-                      color: const Color.fromARGB(149, 109, 109, 109),
-                      borderRadius: BorderRadius.circular(12),
+                        color: const Color.fromARGB(149, 109, 109, 109),
+                        borderRadius: BorderRadius.circular(12),
                     ),
                     child: IconButton(
-                        onPressed: () async{
-                          await _noteService.deleteNote(note!.id.toString()).then((value) => Navigator.pop(context));
-                          // BlocProvider.of<NoteBloc>(context)
-                          //     .add(DeleteNote(note!.id!));
-                          
-                        },
-                        icon: const Icon(
-                          CupertinoIcons.delete,
-                          size: 20,
-                        )),
+                          onPressed: () async{
+                            await _noteService.pinNote(note!.id.toString(),note!.isPin).then((value) => Navigator.pop(context));  
+                          },
+                          icon: const Icon(
+                            CupertinoIcons.pin,
+                            size: 20,
+                          )),
                   ),
-                  Container(
+                      ),
+                      Padding(
+                        padding: const EdgeInsets.all(8.0),
+                        child: Container(
                     alignment: Alignment.center,
                     height: 35,
                     width: 35,
                     decoration: BoxDecoration(
-                      color: const Color.fromARGB(149, 109, 109, 109),
-                      borderRadius: BorderRadius.circular(12),
+                        color: const Color.fromARGB(149, 109, 109, 109),
+                        borderRadius: BorderRadius.circular(12),
                     ),
                     child: IconButton(
-                        onPressed: () async {
-                          if (titleController.text == "") {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text("Please Add Title")));
-                            return;
-                          }
-                          if (contentController.text == "") {
-                            ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                    content: Text("Type Something in body")));
-                            return;
-                          }
+                          onPressed: () async{
+                            await _noteService.deleteNote(note!.id.toString()).then((value) => Navigator.pop(context));  
+                          },
+                          icon: const Icon(
+                            CupertinoIcons.delete,
+                            size: 20,
+                          )),
+                  ),
+                      ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Container(
+                      alignment: Alignment.center,
+                      height: 35,
+                      width: 35,
+                      decoration: BoxDecoration(
+                        color: const Color.fromARGB(149, 109, 109, 109),
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: IconButton(
+                          onPressed: () async {
+                            if (titleController.text == "") {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text("Please Add Title")));
+                              return;
+                            }
+                            if (contentController.text == "") {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                      content: Text("Type Something in body")));
+                              return;
+                            }
 
-                          if (note == null) {
-                            int random = Random().nextInt(
-                                ColorCombination.colorCombinations.length);
-                            await _noteService.postNote(
-                                titleController.text, contentController.text).then((response) {
-                                  Navigator.pop(context);
-                                });
-                            // BlocProvider.of<NoteBloc>(context).add(InsertNote(
-                            //     Note(
-                            //         heading: titleController.text,
-                            //         content: contentController.text,
-                            //         lastEdit: DateTime.now(),
-                            //         primary: ColorCombination
-                            //             .colorCombinations[random]['primary']!,
-                            //         secondary: ColorCombination
-                            //                 .colorCombinations[random]
-                            //             ['secondary']!)));Navigator.pop(context);
-                            
-                          } else {
-                            // BlocProvider.of<NoteBloc>(context)
-                            //     .add(UpdateNote(Note(
-                            //   id: note!.id,
-                            //   heading: titleController.text,
-                            //   content: contentController.text,
-                            //   lastEdit: DateTime.now(),
-                            //   primary: note!.primary,
-                            //   secondary: note!.secondary,
-                            // )));
-                            await _noteService.updateNote(note!.id.toString(),
-                                titleController.text, contentController.text).then((v) => Navigator.pop(context));
-                          }
-                        },
-                        icon: const Icon(
-                          Icons.done,
-                          size: 20,
-                        )),
+                            if (note == null) {
+                              int random = Random().nextInt(
+                                  ColorCombination.colorCombinations.length);
+                              await _noteService.postNote(
+                                  titleController.text, contentController.text).then((response) {
+                                    Navigator.pop(context);
+                                  });
+                            } else {
+                              await _noteService.updateNote(note!.id.toString(),
+                                  titleController.text, contentController.text).then((v) => Navigator.pop(context));
+                            }
+                          },
+                          icon: const Icon(
+                            Icons.done,
+                            size: 20,
+                          )),
+                    ),
+                  ),
+                    ],
                   ),
                 ],
               ),
