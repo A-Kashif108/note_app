@@ -1,5 +1,3 @@
-import 'package:note_app/utils/color_combination.dart';
-
 class User {
   final String? username;
   final String? password;

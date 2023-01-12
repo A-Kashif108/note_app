@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:note_app/screens/home_page.dart';
 
 Future<void> main() async {
@@ -20,4 +19,3 @@ class MyApp extends StatelessWidget {
     );
   }
 }
-

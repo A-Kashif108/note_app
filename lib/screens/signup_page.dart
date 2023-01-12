@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 
+import 'package:note_app/services/auth_service.dart';
+import 'package:note_app/screens/home_page.dart';
+import 'package:note_app/screens/login_page.dart';
+
 class SignupViewPage extends StatefulWidget {
   const SignupViewPage({super.key});
 
@@ -11,6 +15,7 @@ class _SignupViewPageState extends State<SignupViewPage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController confirmPasswordController = TextEditingController();
+  final _authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -99,8 +104,42 @@ class _SignupViewPageState extends State<SignupViewPage> {
                         fontWeight: FontWeight.w500,
                         fontSize: 20),
                   ),
-                  onPressed: () {
-                    // TODO: signup api call and sending to home page
+                  onPressed: () async {
+                    if (nameController.text == "" ||
+                        passwordController.text == "" ||
+                        confirmPasswordController.text == "") {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text("Please fill all the fields")));
+                      return;
+                    }
+                    if (passwordController.text !=
+                        confirmPasswordController.text) {
+                      ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+                          content: Text("Passwords don't match")));
+                      return;
+                    }
+                    if (passwordController.text == "" ||
+                        nameController.text == "")
+                      await _authService
+                          .signUp(nameController.text, passwordController.text)
+                          .then((value) => {
+                                if (value == 200)
+                                  {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) =>
+                                              const HomePage()),
+                                    )
+                                  }
+                                else
+                                  {
+                                    ScaffoldMessenger.of(context).showSnackBar(
+                                        const SnackBar(
+                                            content:
+                                                Text("User Signup Failed")))
+                                  }
+                              });
                   },
                 )),
             Row(
@@ -116,7 +155,10 @@ class _SignupViewPageState extends State<SignupViewPage> {
                     ),
                   ),
                   onPressed: () {
-                    // TODO: send to Signin page
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => const LoginViewPage()));
                   },
                 )
               ],
