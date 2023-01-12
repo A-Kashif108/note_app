@@ -1,23 +1,24 @@
+import 'dart:convert';
 import 'dart:math';
-
+import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:intl/intl.dart';
-import 'package:note_app/blocs/note/note_bloc.dart';
 import 'package:note_app/model/note.dart';
+import 'package:note_app/services/note_service.dart';
 import 'package:note_app/utils/color_combination.dart';
 
 class NoteViewPage extends StatelessWidget {
   const NoteViewPage({super.key, this.note});
   final Note? note;
-
   @override
   Widget build(BuildContext context) {
     TextEditingController titleController =
         TextEditingController(text: note == null ? "" : note!.heading);
     TextEditingController contentController =
         TextEditingController(text: note == null ? "" : note!.content);
+    final _noteService = NoteService();
     return Scaffold(
       body: SafeArea(
           child: Container(
@@ -55,10 +56,11 @@ class NoteViewPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: IconButton(
-                        onPressed: () {
-                          BlocProvider.of<NoteBloc>(context)
-                              .add(DeleteNote(note!.id!));
-                          Navigator.pop(context);
+                        onPressed: () async{
+                          await _noteService.deleteNote(note!.id.toString()).then((value) => Navigator.pop(context));
+                          // BlocProvider.of<NoteBloc>(context)
+                          //     .add(DeleteNote(note!.id!));
+                          
                         },
                         icon: const Icon(
                           CupertinoIcons.delete,
@@ -74,7 +76,7 @@ class NoteViewPage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(12),
                     ),
                     child: IconButton(
-                        onPressed: () {
+                        onPressed: () async {
                           if (titleController.text == "") {
                             ScaffoldMessenger.of(context).showSnackBar(
                                 const SnackBar(
@@ -91,28 +93,33 @@ class NoteViewPage extends StatelessWidget {
                           if (note == null) {
                             int random = Random().nextInt(
                                 ColorCombination.colorCombinations.length);
-                            BlocProvider.of<NoteBloc>(context).add(InsertNote(
-                                Note(
-                                    heading: titleController.text,
-                                    content: contentController.text,
-                                    lastEdit: DateTime.now(),
-                                    primary: ColorCombination
-                                        .colorCombinations[random]['primary']!,
-                                    secondary: ColorCombination
-                                            .colorCombinations[random]
-                                        ['secondary']!)));
-                            Navigator.pop(context);
+                            await _noteService.postNote(
+                                titleController.text, contentController.text).then((response) {
+                                  Navigator.pop(context);
+                                });
+                            // BlocProvider.of<NoteBloc>(context).add(InsertNote(
+                            //     Note(
+                            //         heading: titleController.text,
+                            //         content: contentController.text,
+                            //         lastEdit: DateTime.now(),
+                            //         primary: ColorCombination
+                            //             .colorCombinations[random]['primary']!,
+                            //         secondary: ColorCombination
+                            //                 .colorCombinations[random]
+                            //             ['secondary']!)));Navigator.pop(context);
+                            
                           } else {
-                            BlocProvider.of<NoteBloc>(context)
-                                .add(UpdateNote(Note(
-                              id: note!.id,
-                              heading: titleController.text,
-                              content: contentController.text,
-                              lastEdit: DateTime.now(),
-                              primary: note!.primary,
-                              secondary: note!.secondary,
-                            )));
-                            Navigator.pop(context);
+                            // BlocProvider.of<NoteBloc>(context)
+                            //     .add(UpdateNote(Note(
+                            //   id: note!.id,
+                            //   heading: titleController.text,
+                            //   content: contentController.text,
+                            //   lastEdit: DateTime.now(),
+                            //   primary: note!.primary,
+                            //   secondary: note!.secondary,
+                            // )));
+                            await _noteService.updateNote(note!.id.toString(),
+                                titleController.text, contentController.text).then((v) => Navigator.pop(context));
                           }
                         },
                         icon: const Icon(
