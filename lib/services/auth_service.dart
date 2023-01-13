@@ -1,25 +1,24 @@
 import 'dart:convert';
 
-import 'package:note_app/model/user.dart';
 import 'package:http/http.dart' as http;
 
 class AuthService {
-  Future<http.Response> login(User user) async {
+  Future<int> signIn(String username, String password) async {
     final response = await http.post(
-        Uri.parse('http://nanonish.pythonanywhere.com/users/login/'),
+        Uri.parse('http://nanonish.pythonanywhere.com/users/signin/'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
         body: jsonEncode(
           <String, String>{
-            "username": user.username!,
-            "password": user.password!,
+            "username": username,
+            "password": password,
           },
         ));
-    return response;
+    return response.statusCode;
   }
 
-  Future<void> signup(User user) async {
+  Future<int> signUp(String username, String password) async {
     final response = await http.post(
       Uri.parse('http://nanonish.pythonanywhere.com/users/signup/'),
       headers: <String, String>{
@@ -27,10 +26,11 @@ class AuthService {
       },
       body: jsonEncode(
         <String, String>{
-          "username": user.username!,
-          "password": user.password!,
+          "username": username,
+          "password": password,
         },
       ),
     );
+    return response.statusCode;
   }
 }

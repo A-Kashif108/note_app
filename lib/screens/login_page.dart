@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
 
+import 'package:note_app/services/auth_service.dart';
+import 'package:note_app/services/local_storage_service.dart';
+import 'package:note_app/screens/home_page.dart';
+import 'package:note_app/screens/signup_page.dart';
+
 class LoginViewPage extends StatefulWidget {
   const LoginViewPage({Key? key}) : super(key: key);
 
@@ -10,6 +15,7 @@ class LoginViewPage extends StatefulWidget {
 class _LoginViewPageState extends State<LoginViewPage> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
+  final _authService = AuthService();
 
   @override
   Widget build(BuildContext context) {
@@ -75,21 +81,50 @@ class _LoginViewPageState extends State<LoginViewPage> {
                   height: 72,
                   padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
                   child: ElevatedButton(
-                    style: ButtonStyle(
-                      backgroundColor:
-                          MaterialStateProperty.all<Color>(Colors.grey),
-                    ),
-                    child: const Text(
-                      'Login',
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontWeight: FontWeight.w500,
-                          fontSize: 20),
-                    ),
-                    onPressed: () {
-                      // TODO: login api call and sending to home page
-                    },
-                  )),
+                      style: ButtonStyle(
+                        backgroundColor:
+                            MaterialStateProperty.all<Color>(Colors.grey),
+                      ),
+                      child: const Text(
+                        'Login',
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontWeight: FontWeight.w500,
+                            fontSize: 20),
+                      ),
+                      onPressed: () async {
+                        if (nameController.text == "" ||
+                            passwordController.text == "") {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                              const SnackBar(
+                                  content: Text("Please fill all the fields")));
+                          return;
+                        }
+
+                        await _authService
+                            .signIn(
+                                nameController.text, passwordController.text)
+                            .then((value) => {
+                                  if (value == 201)
+                                    {
+                                      LocalStorage.setUsername(
+                                          nameController.text),
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const HomePage()),
+                                      )
+                                    }
+                                  else
+                                    {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                              content:
+                                                  Text("User Login Failed")))
+                                    }
+                                });
+                      })),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
@@ -103,7 +138,10 @@ class _LoginViewPageState extends State<LoginViewPage> {
                       ),
                     ),
                     onPressed: () {
-                      // TODO: send to Signup page
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SignupViewPage()));
                     },
                   )
                 ],
