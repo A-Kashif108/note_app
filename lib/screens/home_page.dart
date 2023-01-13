@@ -84,7 +84,6 @@ class _HomePageState extends State<HomePage> {
                     }
                   });
                   notes = temp;
-                  print(notes);
                   return SingleChildScrollView(
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),

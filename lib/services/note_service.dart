@@ -3,10 +3,12 @@ import 'dart:convert';
 import 'package:note_app/model/note.dart';
 import 'package:http/http.dart' as http;
 
+import 'local_storage_service.dart';
+
 class NoteService {
   Future<List<Note>> getNotes(String username) async {
     final notes = await http.get(
-        Uri.parse('http://10.0.2.2:8000/notes/testUser'),
+        Uri.parse('https://nanonish.pythonanywhere.com/notes/${LocalStorage.getUsername()}'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset-UTF-8'
         });
@@ -21,7 +23,7 @@ class NoteService {
   }
 
   Future<void> deleteNote(String id) async {
-    await http.delete(Uri.parse('http://10.0.2.2:8000/notes/$id'),
+    await http.delete(Uri.parse('https://nanonish.pythonanywhere.com/notes/$id'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset-UTF-8'
         });
@@ -29,7 +31,7 @@ class NoteService {
 
   Future<void> pinNote(String id,bool isPin) async {
     await http.patch(
-      Uri.parse('http://10.0.2.2:8000/notes/$id'),
+      Uri.parse('https://nanonish.pythonanywhere.com/notes/$id'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
@@ -41,19 +43,19 @@ class NoteService {
 
   Future<http.Response> postNote(String title, String text) async {
     final response = await http.post(
-      Uri.parse('http://10.0.2.2:8000/notes/'),
+      Uri.parse('https://nanonish.pythonanywhere.com/notes/'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(
-          <String, String>{"author": "testUser", "title": title, "text": text}),
+          <String, String>{"author": LocalStorage.getUsername(), "title": title, "text": text}),
     );
     return response;
   }
 
   Future<void> updateNote(String id, String title, String text) async {
     await http.patch(
-      Uri.parse('http://10.0.2.2:8000/notes/$id'),
+      Uri.parse('https://nanonish.pythonanywhere.com/notes/$id'),
       headers: <String, String>{
         'Content-Type': 'application/json; charset-UTF-8'
       },
