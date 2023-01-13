@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 
 import 'package:note_app/services/auth_service.dart';
+import 'package:note_app/services/local_storage_service.dart';
 import 'package:note_app/screens/home_page.dart';
-import 'package:note_app/screens/login_page.dart';
+import 'package:note_app/screens/signup_page.dart';
 
 class LoginViewPage extends StatefulWidget {
   const LoginViewPage({Key? key}) : super(key: key);
@@ -99,30 +100,30 @@ class _LoginViewPageState extends State<LoginViewPage> {
                                   content: Text("Please fill all the fields")));
                           return;
                         }
-                        if (passwordController.text == "" ||
-                            nameController.text == "")
-                          await _authService
-                              .signIn(
-                                  nameController.text, passwordController.text)
-                              .then((value) => {
-                                    if (value == 200)
-                                      {
-                                        // TODO: localstorage.username
-                                        Navigator.push(
-                                          context,
-                                          MaterialPageRoute(
-                                              builder: (context) =>
-                                                  const HomePage()),
-                                        )
-                                      }
-                                    else
-                                      {
-                                        ScaffoldMessenger.of(context)
-                                            .showSnackBar(const SnackBar(
-                                                content:
-                                                    Text("User Login Failed")))
-                                      }
-                                  });
+
+                        await _authService
+                            .signIn(
+                                nameController.text, passwordController.text)
+                            .then((value) => {
+                                  if (value == 201)
+                                    {
+                                      LocalStorage.setUsername(
+                                          nameController.text),
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (context) =>
+                                                const HomePage()),
+                                      )
+                                    }
+                                  else
+                                    {
+                                      ScaffoldMessenger.of(context)
+                                          .showSnackBar(const SnackBar(
+                                              content:
+                                                  Text("User Login Failed")))
+                                    }
+                                });
                       })),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -137,7 +138,10 @@ class _LoginViewPageState extends State<LoginViewPage> {
                       ),
                     ),
                     onPressed: () {
-                      // TODO: send to Signup page
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const SignupViewPage()));
                     },
                   )
                 ],
