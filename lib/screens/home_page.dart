@@ -4,7 +4,6 @@ import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
 import 'package:note_app/screens/note_page.dart';
 import 'package:note_app/services/note_service.dart';
-import 'package:note_app/utils/color_combination.dart';
 import '../model/note.dart';
 
 class HomePage extends StatefulWidget {
@@ -77,6 +76,8 @@ class _HomePageState extends State<HomePage> {
                     return const Center(
                       child: Text("No notes you have"),
                     );
+                  }else{
+                    notes = notes.map((e) => null)
                   }
                   return SingleChildScrollView(
                     child: Padding(
