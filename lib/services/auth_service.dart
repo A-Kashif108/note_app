@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 class AuthService {
   Future<int> signIn(String username, String password) async {
     final response = await http.post(
-        Uri.parse('http://nanonish.pythonanywhere.com/users/login/'),
+        Uri.parse('http://nanonish.pythonanywhere.com/users/signin/'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset=UTF-8',
         },
