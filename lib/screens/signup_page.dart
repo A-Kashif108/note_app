@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:note_app/services/auth_service.dart';
+import 'package:note_app/services/local_storage_service.dart';
 import 'package:note_app/screens/home_page.dart';
 import 'package:note_app/screens/login_page.dart';
 
@@ -63,7 +64,7 @@ class _SignupViewPageState extends State<SignupViewPage> {
             Container(
               padding: const EdgeInsets.all(10),
               child: TextField(
-                controller: nameController,
+                controller: passwordController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(
@@ -76,7 +77,7 @@ class _SignupViewPageState extends State<SignupViewPage> {
             Container(
               padding: const EdgeInsets.all(10),
               child: TextField(
-                controller: nameController,
+                controller: confirmPasswordController,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(
@@ -118,28 +119,25 @@ class _SignupViewPageState extends State<SignupViewPage> {
                           content: Text("Passwords don't match")));
                       return;
                     }
-                    if (passwordController.text == "" ||
-                        nameController.text == "")
-                      await _authService
-                          .signUp(nameController.text, passwordController.text)
-                          .then((value) => {
-                                if (value == 200)
-                                  {
-                                    Navigator.push(
-                                      context,
-                                      MaterialPageRoute(
-                                          builder: (context) =>
-                                              const HomePage()),
-                                    )
-                                  }
-                                else
-                                  {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                        const SnackBar(
-                                            content:
-                                                Text("User Signup Failed")))
-                                  }
-                              });
+                    await _authService
+                        .signUp(nameController.text, passwordController.text)
+                        .then((value) => {
+                              if (value == 201)
+                                {
+                                  LocalStorage.setUsername(nameController.text),
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => const HomePage()),
+                                  )
+                                }
+                              else
+                                {
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                      const SnackBar(
+                                          content: Text("User Signup Failed")))
+                                }
+                            });
                   },
                 )),
             Row(
