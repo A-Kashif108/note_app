@@ -30,6 +30,6 @@ class Note {
 
   @override
   String toString() {
-    return 'Note{id: $id, heading: $heading, content: $content, lastEdit: $lastEdit, primary: $primary, secondary: $secondary}';
+    return 'Note{id: $id, isPin: $isPin heading: $heading, content: $content, lastEdit: $lastEdit, primary: $primary, secondary: $secondary}';
   }
 }

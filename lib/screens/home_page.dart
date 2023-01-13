@@ -67,18 +67,24 @@ class _HomePageState extends State<HomePage> {
                       child: CircularProgressIndicator(),
                     );
                   }
-                  List<Note>? notes = snapshot.data;
+                  notes = snapshot.data!;
                   double h1 = 0;
                   double h2 = 0;
                   bool toggle = false;
                   bool full = false;
-                  if (notes == null) {
-                    return const Center(
-                      child: Text("No notes you have"),
-                    );
-                  }else{
-                    notes = notes.map((e) => null)
-                  }
+                  List<Note> temp = [];
+                  notes.forEach((e) {
+                    if (e.isPin) {
+                      temp.add(e);
+                    }
+                  });
+                  notes.forEach((e) {
+                    if (!e.isPin) {
+                      temp.add(e);
+                    }
+                  });
+                  notes = temp;
+                  print(notes);
                   return SingleChildScrollView(
                     child: Padding(
                       padding: const EdgeInsets.all(12.0),
@@ -109,19 +115,19 @@ class _HomePageState extends State<HomePage> {
                               toggle = true;
                             }
                           }
-                          print(notes[index]);
                           return StaggeredGridTile.count(
                             crossAxisCellCount: full ? 2 : 1,
                             mainAxisCellCount:
                                 notes[index].heading.length > 55 ? 1.5 : 1,
                             child: InkWell(
                               onTap: (() {
-                                Navigator.of(context).push(MaterialPageRoute(
+                                Navigator.of(context)
+                                    .push(MaterialPageRoute(
                                   builder: (context) =>
                                       NoteViewPage(note: notes[index]),
-                                )).then((value) {
-                                  setState(() {
-                                  });
+                                ))
+                                    .then((value) {
+                                  setState(() {});
                                 });
                               }),
                               child: Container(
@@ -177,8 +183,7 @@ class _HomePageState extends State<HomePage> {
             builder: (context) => const NoteViewPage(),
           ))
               .then((value) {
-            setState(() {
-            });
+            setState(() {});
           });
         },
         child: const Icon(Icons.add, size: 25),

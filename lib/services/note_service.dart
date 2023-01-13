@@ -31,12 +31,12 @@ class NoteService {
     await http.patch(
       Uri.parse('http://10.0.2.2:8000/notes/$id'),
       headers: <String, String>{
-        'Content-Type': 'application/json; charset-UTF-8'
+        'Content-Type': 'application/json; charset=UTF-8',
       },
       body: jsonEncode(<String, bool>{
-        "isPin": isPin,
+        "isPin": isPin
       }),
-    );
+    ).then((value) => print('error is : ${value.toString()}'));
   }
 
   Future<http.Response> postNote(String title, String text) async {

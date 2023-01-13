@@ -61,10 +61,10 @@ class NoteViewPage extends StatelessWidget {
                     ),
                     child: IconButton(
                           onPressed: () async{
-                            await _noteService.pinNote(note!.id.toString(),note!.isPin).then((value) => Navigator.pop(context));  
+                            await _noteService.pinNote(note!.id.toString(),!note!.isPin).then((value) => Navigator.pop(context));  
                           },
-                          icon: const Icon(
-                            CupertinoIcons.pin,
+                          icon:  Icon(
+                            note!.isPin? CupertinoIcons.pin_fill :CupertinoIcons.pin,
                             size: 20,
                           )),
                   ),
