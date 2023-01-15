@@ -30,17 +30,17 @@ class _LoginViewPageState extends State<LoginViewPage> {
                   child: const Text(
                     'Notes App',
                     style: TextStyle(
-                        color: Color.fromARGB(255, 120, 120, 120),
+                        color: Colors.white,
                         fontWeight: FontWeight.w500,
-                        fontSize: 60),
+                        fontSize: 35),
                   )),
               Container(
-                  alignment: Alignment.center,
+                  alignment: Alignment.centerLeft,
                   padding: const EdgeInsets.all(10),
                   child: const Text(
                     'Sign in',
                     style: TextStyle(
-                        fontSize: 32,
+                        fontSize: 28,
                         fontWeight: FontWeight.w500,
                         color: Colors.white),
                   )),
@@ -79,12 +79,11 @@ class _LoginViewPageState extends State<LoginViewPage> {
               ),
               Container(
                   height: 72,
-                  padding: const EdgeInsets.fromLTRB(40, 10, 40, 10),
-                  child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all<Color>(Colors.grey),
-                      ),
+                  padding: const EdgeInsets.fromLTRB(100, 10, 100, 10),
+                  child: MaterialButton(
+                    elevation: 5,
+                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+                    color: Color.fromARGB(255, 49, 31, 31),
                       child: const Text(
                         'Login',
                         style: TextStyle(
@@ -100,7 +99,6 @@ class _LoginViewPageState extends State<LoginViewPage> {
                                   content: Text("Please fill all the fields")));
                           return;
                         }
-
                         await _authService
                             .signIn(
                                 nameController.text, passwordController.text)

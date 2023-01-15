@@ -1,8 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
 import 'package:note_app/screens/note_page.dart';
+import 'package:note_app/services/local_storage_service.dart';
 import 'package:note_app/services/note_service.dart';
 import '../model/note.dart';
 
@@ -43,9 +45,12 @@ class _HomePageState extends State<HomePage> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: IconButton(
-                          onPressed: () {},
+                          onPressed: () {
+                            LocalStorage.setUsername('');
+                            Navigator.of(context).pop(context);
+                          },
                           icon: const Icon(
-                            Icons.search,
+                            Icons.exit_to_app_outlined,
                             size: 20,
                           )),
                     )
