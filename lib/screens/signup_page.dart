@@ -65,6 +65,7 @@ class _SignupViewPageState extends State<SignupViewPage> {
               padding: const EdgeInsets.all(10),
               child: TextField(
                 controller: passwordController,
+                obscureText: true,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(
@@ -78,6 +79,7 @@ class _SignupViewPageState extends State<SignupViewPage> {
               padding: const EdgeInsets.all(10),
               child: TextField(
                 controller: confirmPasswordController,
+                obscureText: true,
                 decoration: const InputDecoration(
                   border: OutlineInputBorder(
                       borderRadius: BorderRadius.all(
@@ -153,7 +155,7 @@ class _SignupViewPageState extends State<SignupViewPage> {
                     ),
                   ),
                   onPressed: () {
-                    Navigator.push(
+                    Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(
                             builder: (context) => const LoginViewPage()));

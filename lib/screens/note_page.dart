@@ -5,15 +5,19 @@ import 'package:note_app/model/note.dart';
 import 'package:note_app/services/note_service.dart';
 
 class NoteViewPage extends StatelessWidget {
-  const NoteViewPage({super.key, this.note});
+  NoteViewPage({super.key, this.note}) {
+    if (note != null) {
+      titleController.text = note!.heading;
+      contentController.text = note!.content;
+    }
+  }
   final Note? note;
+  final TextEditingController titleController = TextEditingController();
+  final TextEditingController contentController = TextEditingController();
+  final noteService = NoteService();
+
   @override
   Widget build(BuildContext context) {
-    TextEditingController titleController =
-        TextEditingController(text: note?.heading);
-    TextEditingController contentController =
-        TextEditingController(text: note?.content);
-    final noteService = NoteService();
     return Scaffold(
       body: SafeArea(
           child: Padding(

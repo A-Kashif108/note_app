@@ -183,7 +183,7 @@ class _HomePageState extends State<HomePage> {
         onPressed: () {
           Navigator.of(context)
               .push(MaterialPageRoute(
-            builder: (context) => const NoteViewPage(),
+            builder: (context) => NoteViewPage(),
           ))
               .then((value) {
             setState(() {});

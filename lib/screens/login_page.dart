@@ -108,7 +108,7 @@ class _LoginViewPageState extends State<LoginViewPage> {
                                     {
                                       LocalStorage.setUsername(
                                           nameController.text),
-                                      Navigator.push(
+                                      Navigator.pushReplacement(
                                         context,
                                         MaterialPageRoute(
                                             builder: (context) =>
