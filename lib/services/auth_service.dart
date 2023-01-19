@@ -1,6 +1,5 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import 'package:note_app/services/local_storage_service.dart';
 
 class AuthService {
   Future<int> signIn(String username, String password) async {

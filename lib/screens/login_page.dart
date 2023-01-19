@@ -81,9 +81,10 @@ class _LoginViewPageState extends State<LoginViewPage> {
                   height: 72,
                   padding: const EdgeInsets.fromLTRB(100, 10, 100, 10),
                   child: MaterialButton(
-                    elevation: 5,
-                     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-                    color: Color.fromARGB(255, 49, 31, 31),
+                      elevation: 5,
+                      shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(10)),
+                      color: const Color.fromARGB(255, 49, 31, 31),
                       child: const Text(
                         'Login',
                         style: TextStyle(

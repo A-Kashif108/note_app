@@ -1,6 +1,4 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:intl/intl.dart';
 import 'package:note_app/screens/note_page.dart';
@@ -45,14 +43,15 @@ class _HomePageState extends State<HomePage> {
                         borderRadius: BorderRadius.circular(12),
                       ),
                       child: IconButton(
-                          onPressed: () {
-                            LocalStorage.setUsername('');
-                            Navigator.of(context).pop(context);
-                          },
-                          icon: const Icon(
-                            Icons.exit_to_app_outlined,
-                            size: 20,
-                          )),
+                        onPressed: () {
+                          LocalStorage.setUsername('');
+                          Navigator.of(context).pop();
+                        },
+                        icon: const Icon(
+                          Icons.exit_to_app_outlined,
+                          size: 20,
+                        ),
+                      ),
                     )
                   ],
                 ),
@@ -78,12 +77,12 @@ class _HomePageState extends State<HomePage> {
                   bool toggle = false;
                   bool full = false;
                   List<Note> temp = [];
-                  notes.forEach((e) {
+                  notes.map((e) {
                     if (e.isPin) {
                       temp.add(e);
                     }
                   });
-                  notes.forEach((e) {
+                  notes.map((e) {
                     if (!e.isPin) {
                       temp.add(e);
                     }
@@ -147,7 +146,7 @@ class _HomePageState extends State<HomePage> {
                                     Expanded(
                                       child: Text(
                                         notes[index].heading,
-                                        style: TextStyle(
+                                        style: const TextStyle(
                                             color: Colors.white,
                                             fontSize: 20,
                                             fontWeight: FontWeight.w500),

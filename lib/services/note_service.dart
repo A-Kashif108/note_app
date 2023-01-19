@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:note_app/model/note.dart';
 import 'package:http/http.dart' as http;
 
@@ -8,7 +9,8 @@ import 'local_storage_service.dart';
 class NoteService {
   Future<List<Note>> getNotes(String username) async {
     final notes = await http.get(
-        Uri.parse('https://nanonish.pythonanywhere.com/notes/${LocalStorage.getUsername()}'),
+        Uri.parse(
+            'https://nanonish.pythonanywhere.com/notes/${LocalStorage.getUsername()}'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset-UTF-8'
         });
@@ -23,22 +25,23 @@ class NoteService {
   }
 
   Future<void> deleteNote(String id) async {
-    await http.delete(Uri.parse('https://nanonish.pythonanywhere.com/notes/$id'),
+    await http.delete(
+        Uri.parse('https://nanonish.pythonanywhere.com/notes/$id'),
         headers: <String, String>{
           'Content-Type': 'application/json; charset-UTF-8'
         });
   }
 
-  Future<void> pinNote(String id,bool isPin) async {
-    await http.patch(
-      Uri.parse('https://nanonish.pythonanywhere.com/notes/$id'),
-      headers: <String, String>{
-        'Content-Type': 'application/json; charset=UTF-8',
-      },
-      body: jsonEncode(<String, bool>{
-        "isPin": isPin
-      }),
-    ).then((value) => print('error is : ${value.toString()}'));
+  Future<void> pinNote(String id, bool isPin) async {
+    await http
+        .patch(
+          Uri.parse('https://nanonish.pythonanywhere.com/notes/$id'),
+          headers: <String, String>{
+            'Content-Type': 'application/json; charset=UTF-8',
+          },
+          body: jsonEncode(<String, bool>{"isPin": isPin}),
+        )
+        .then((value) => debugPrint('error is : ${value.toString()}'));
   }
 
   Future<http.Response> postNote(String title, String text) async {
@@ -47,8 +50,11 @@ class NoteService {
       headers: <String, String>{
         'Content-Type': 'application/json; charset=UTF-8',
       },
-      body: jsonEncode(
-          <String, String>{"author": LocalStorage.getUsername(), "title": title, "text": text}),
+      body: jsonEncode(<String, String>{
+        "author": LocalStorage.getUsername(),
+        "title": title,
+        "text": text
+      }),
     );
     return response;
   }
